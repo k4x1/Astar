@@ -29,7 +29,9 @@ void Grid::UpdateTypes(Node _CurrentNode)
 		break;
 	case 's':
 		_CurrentNode.m_type = type_entrance;
-		//*m_EntranceNode = _CurrentNode;
+
+		m_EntranceNode = &_CurrentNode;
+
 		//makes a reference ot start
 		break;
 	case 'x':
@@ -48,7 +50,7 @@ void Grid::UpdateTypes(Node _CurrentNode)
 
 void Grid::Update()
 {
-}
+} 
 
 Grid::Grid(std::string _File)
 {
@@ -75,9 +77,42 @@ Grid::Grid(std::string _File)
 
 		c++; //NO WAY C++ :OOO
 	}
+
+	for (int x = 0; x < 20; x++)
+	{
+		for (int y = 0; y < 20; y++)
+		{
+			
+			for (int i = -1; i < 2; i++)
+			{
+				for (int j = -1; j < 2; j++)
+				{
+
+					if (i != 0 || j != 0) {
+
+						int newX = x + i;
+						int newY = y + j;
+
+						if (newX >= 0 && newX < 20 && newY >= 0 && newY < 20)
+						{
+							m_NodeArray[x][y].m_Neighbours[m_NodeArray[x][y].NeighbourCount] = &m_NodeArray[newX][newY];
+							m_NodeArray[x][y].NeighbourCount++;
+							//if(&m_NodeArray[x][y] == m_EntranceNode){
+							std::cout << m_NodeArray[x][y].NeighbourCount<<std::endl;
+							//}
+						}
+					}
+				}
+			}
+			
+		}
+
+	}
 	GridFile.close();
-	
 }
+
+	
+
 
 Grid::~Grid()
 {

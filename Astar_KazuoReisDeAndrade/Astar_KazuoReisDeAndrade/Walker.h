@@ -6,9 +6,9 @@ class Walker
 public:
 	
 	Node* m_CurrentNode;
-	std::vector<Node>* m_Neighbors;
-	std::vector<Node>* m_Open;
-	std::vector<Node>* m_Closed;
+	std::vector<Node*> m_Neighbors;
+	std::vector<Node*> m_Open;
+	std::vector<Node*> m_Closed;
 	Grid* m_GridReference;
 
 	Walker(Grid _GridReference);
