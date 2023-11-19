@@ -54,10 +54,136 @@ void Grid::UpdateTypes(Node _CurrentNode)
 void Grid::Update()
 {
 }
+/*
+void Grid::DFS(Node* startNode, std::vector<bool>& visited, std::vector<Node*>& path)
+{
+	int index = startNode->m_CharType == 's' ? 10 : startNode->m_CharType - 'a';
+	
+	visited[index] = true;
+	path.push_back(startNode);
+
+	for (int i = 0; i < startNode->NeighbourCount; ++i)
+	{
+		
+		Node* neighbor = startNode->m_Neighbours[i]; 
+		int NeighborIndex = neighbor->m_CharType == 's' ? 10 : neighbor->m_CharType - 'a';
+		std::cout << neighbor->m_CharType;
+		if (!visited[NeighborIndex])
+		{
+			
+			DFS(neighbor, visited, path);
+		}
+	}
+}
+
+void Grid::RunDFS()
+{
+	std::vector<bool> visited(11, false);
+	std::vector<Node*> path;
+
+	for (int i = 0; i < 10; ++i)
+	{
+		Node* collectible = m_Collectables[i];
+		int index = collectible->m_CharType == 's' ? 10 : collectible->m_CharType - 'a';
+		std::cout << "I: " << index << std::endl;
+		if (!visited[index])
+		{
+			
+			DFS(collectible, visited, path);
+
+			// Do something with the path (it represents the order in which collectibles were visited)
+			path.clear(); // Clear path for the next connected component
+		}
+	}
+}*/
+void Grid::RunDFS(int _startNode)
+{
+	std::vector<bool> visited(12, false);
+	std::stack<int> stack;
+	std::vector<int> path;
+
+	visited[_startNode] = true;
+	stack.push(_startNode);
+
+	while (!stack.empty())
+	{
+		int currentNode = stack.top();
+		stack.pop();
+
+		path.push_back(currentNode); // Collect the order in which nodes are visited
+		std::cout << "c: " << m_Collectables[currentNode]->m_CharType << std::endl;
+
+		for (int i = 0; i < 11; ++i)
+		{
+			if (!visited[i] && m_WeightPoints[currentNode][i] != 0)
+			{
+				visited[i] = true;
+				stack.push(i);
+			}
+		}
+	}
+
+	// Do something with the path
+}
+
+void Grid::RunBFS(int _startNode)
+{
+	std::vector<bool> visited(12, false);
+
+	std::queue<int> q;
+	std::vector<int> path;
+
+	visited[_startNode] = true;
+	q.push(_startNode);
+
+	while (!q.empty())
+	{
+		int currentNode = q.front();
+		q.pop();
+
+		path.push_back(currentNode); // Collect the order in which nodes are visited
+		std::cout << "c: " <<m_Collectables[currentNode]->m_CharType << std::endl;
+		for (int i = 0; i < 11; ++i)
+		{
+			if (!visited[i] && m_WeightPoints[currentNode][i] != 0)
+			{
+				visited[i] = true;
+				q.push(i);
+			}
+			
+		}
+	}
+
+	// Do something with the path
+}
+
+
+
 void Grid::AssignWeights()
 {
-	int Points[11][11];
+	for (int row = 0; row < 10; row++)
+	{
+		for (int column = 0; column < 10; column++)
+		{
+			if (row != column)
+			{
+				m_WeightPoints[column][row] = GetEuclideanDistance(
+					m_Collectables[row]->m_NodeX, m_Collectables[row]->m_NodeY,
+					m_Collectables[column]->m_NodeX, m_Collectables[column]->m_NodeY
+				);
+				
+			}
+			std::cout << m_WeightPoints[column][row] << " ";
+		}
+		std::cout << "\n";
+	}
+}
 
+float Grid::GetEuclideanDistance(int x1, int y1, int x2, int y2)
+{
+	int dx = x2 - x1;
+	int dy = y2 - y1;
+	return std::sqrt(dx * dx + dy * dy);
 }
 
 
@@ -85,10 +211,11 @@ Grid::Grid(std::string _File)
 			if(m_NodeArray[r][c].m_CharType == 's'){
 				m_valid++;
 				m_EntranceNode = &m_NodeArray[r][c];
+				m_Collectables[10] = &m_NodeArray[r][c];
 			}
 			else if (m_NodeArray[r][c].m_CharType >= 'a' && m_NodeArray[r][c].m_CharType <= 'j') {
 				m_gGoal[int(m_NodeArray[r][c].m_CharType - 97)] = &m_NodeArray[r][c];
-				*m_Collectables[int(m_NodeArray[r][c].m_CharType - 97)] = _CurrentNode;
+				m_Collectables[int(m_NodeArray[r][c].m_CharType - 97)] = &m_NodeArray[r][c];
 				//converts a to int(0) and so on and sets the x and y pos
 			}
 			else if(m_NodeArray[r][c].m_CharType == 'x'){

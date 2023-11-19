@@ -153,6 +153,9 @@ void Walker::FindPathAstar()
 
 	*/
 }
+#include <queue>
+
+
 
 
 int Walker::GetDistance(Node _nodeA, Node _nodeB)
