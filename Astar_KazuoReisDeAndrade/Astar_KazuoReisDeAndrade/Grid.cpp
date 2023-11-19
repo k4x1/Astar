@@ -18,6 +18,7 @@ void Grid::DrawNodes()
 
 void Grid::UpdateTypes(Node _CurrentNode)
 {
+	
 	switch (_CurrentNode.m_CharType)
 	{
 	case '.':
@@ -31,6 +32,7 @@ void Grid::UpdateTypes(Node _CurrentNode)
 		_CurrentNode.m_type = type_entrance;
 
 		m_EntranceNode = &_CurrentNode;
+		//something wrong with this
 
 		//makes a reference ot start
 		break;
@@ -41,16 +43,23 @@ void Grid::UpdateTypes(Node _CurrentNode)
 		break;
 	case 'a': case 'b':case 'c': case 'd': case 'e': case 'f':case 'g': case 'h':case 'i': case 'j':
 		_CurrentNode.m_type = type_collectable;
-		//*m_Collectables[m_AmountOfCollectibles] = _CurrentNode; //adds collectables to array for reference
+		 //adds collectables to array for reference
 		break;
 	default:
 		break;
 	}
+	m_gridCount++;
 }
 
 void Grid::Update()
 {
-} 
+}
+void Grid::AssignWeights()
+{
+	int Points[11][11];
+
+}
+
 
 Grid::Grid(std::string _File)
 {
@@ -58,7 +67,7 @@ Grid::Grid(std::string _File)
 	GridFile.open(_File);
 	std::string line;
 	
-	std::cout << line;
+	//std::cout << line;
 	if (!GridFile) {
 		std::cout << "File not opened" << std::endl;
 	}
@@ -67,17 +76,34 @@ Grid::Grid(std::string _File)
 		
 		for (int r = 0; r < line.size(); r++)
 		{
-			//std::cout << line[r] << std::endl;
+			
 			m_NodeArray[r][c].m_CharType = line[r];
 			m_NodeArray[r][c].m_NodeX = r;
 			m_NodeArray[r][c].m_NodeY = c;
 			UpdateTypes(m_NodeArray[r][c]);
-
+			
+			if(m_NodeArray[r][c].m_CharType == 's'){
+				m_valid++;
+				m_EntranceNode = &m_NodeArray[r][c];
+			}
+			else if (m_NodeArray[r][c].m_CharType >= 'a' && m_NodeArray[r][c].m_CharType <= 'j') {
+				m_gGoal[int(m_NodeArray[r][c].m_CharType - 97)] = &m_NodeArray[r][c];
+				*m_Collectables[int(m_NodeArray[r][c].m_CharType - 97)] = _CurrentNode;
+				//converts a to int(0) and so on and sets the x and y pos
+			}
+			else if(m_NodeArray[r][c].m_CharType == 'x'){
+				m_gGoal[10]= &m_NodeArray[r][c];
+				m_valid++;
+			}
 		}
 
 		c++; //NO WAY C++ :OOO
 	}
-
+	if (m_valid < 2) {
+		std::cout << "InvalidMap" << std::endl;
+		GridFile.close();
+		return;
+	}
 	for (int x = 0; x < 20; x++)
 	{
 		for (int y = 0; y < 20; y++)
@@ -97,9 +123,6 @@ Grid::Grid(std::string _File)
 						{
 							m_NodeArray[x][y].m_Neighbours[m_NodeArray[x][y].NeighbourCount] = &m_NodeArray[newX][newY];
 							m_NodeArray[x][y].NeighbourCount++;
-							//if(&m_NodeArray[x][y] == m_EntranceNode){
-							std::cout << m_NodeArray[x][y].NeighbourCount<<std::endl;
-							//}
 						}
 					}
 				}

@@ -19,7 +19,8 @@ public:
 	int m_Hcost; //distance from exit node
 	int m_Fcost; //G + H
 	int NeighbourCount = 0;
-
+	int m_Weight = 0;
+	Node* m_Parent;
 	NodeType m_type;
 	void InitType();
 	//Node* m_Neighbours[8];
