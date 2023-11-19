@@ -30,7 +30,7 @@ int main() {
 			break;		
 		case 'b':
 			grid.AssignWeights();
-			grid.RunBFS(11);
+
 			grid.RunBFS(11);
 			break;
 		case 'a':
