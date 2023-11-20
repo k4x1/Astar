@@ -104,13 +104,16 @@ void Walker::FindPathAstar()
 				
 			}
 		}
-		std::cout << CurrentLookingAt<< "| "<< m_wGoal[goalCount]<<std::endl;
+		//std::cout << CurrentLookingAt<< "| "<< m_wGoal[goalCount]<<std::endl;
 		m_Open.erase(m_Open.begin() + Count);
 		m_Closed.push_back(CurrentLookingAt);
 		if (CurrentLookingAt == m_wGoal[goalCount]) {
 			RetracePath(m_StartingNode, m_wGoal[goalCount]);
-			
+			m_StartingNode = m_wGoal[goalCount];
 			goalCount++;
+			m_Open.clear();
+			m_Closed.clear();
+			std::cout << goalCount;
 			
 			return;
 		}
@@ -153,7 +156,14 @@ void Walker::FindPathAstar()
 
 	*/
 }
-#include <queue>
+void Walker::gotoxy(int x, int y)
+{
+	COORD coord;
+	coord.X = x;
+	coord.Y = y;
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+}
+
 
 
 
@@ -174,23 +184,30 @@ int Walker::GetDistance(Node _nodeA, Node _nodeB)
 void Walker::RetracePath(Node* _Start, Node* _End)
 {
 	
-	std::cout << "path:" << std::endl;
+	/*std::cout << "path:" << std::endl;
 	std::cout << _Start->m_CharType << std::endl;
-	std::cout << _End->m_CharType << std::endl;
+	std::cout << _End->m_CharType << std::endl;*/
 	std::vector<Node*> Path;
 	Node* CurrentNode = _End;
-	
+	int PathSize = 0;
 	
 	while (CurrentNode != _Start) {
-		std::cout << "curr: " << CurrentNode->m_CharType << std::endl;
+	//	std::cout << "curr: " << CurrentNode->m_CharType << std::endl;
 		Path.push_back(CurrentNode);
-		std::cout << "x: " << CurrentNode->m_NodeX << "| y: " << CurrentNode->m_NodeY << std::endl;
+	//	std::cout << "x: " << CurrentNode->m_NodeX << "| y: " << CurrentNode->m_NodeY << std::endl;
 		CurrentNode = CurrentNode->m_Parent;
+		PathSize++;
 
 		
 	}
+	
 	std::reverse(Path.begin(), Path.end());
-
+	for (int i = 0; i < PathSize; i++)
+	{
+		gotoxy((Path[i]->m_NodeX*2)+1, Path[i]->m_NodeY);
+		std::cout << "P";
+	}
+	gotoxy(0, 30);
 	
 
 }

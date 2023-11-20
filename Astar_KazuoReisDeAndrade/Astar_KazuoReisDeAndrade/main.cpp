@@ -35,13 +35,11 @@ int main() {
 			break;
 		case 'a':
 			Pathmaker.InitWalker();
-			while (Pathmaker.goalCount < 1) {
+			while (Pathmaker.goalCount < 11) {
 				Pathmaker.FindPathAstar();
 
-				if (Step) {
-					//grid.DrawNodes();
-				}
-				//	Sleep(1000); //so people get less epilepsy attacks
+			 
+					Sleep(1000); //so people get less epilepsy attacks
 
 			}
 			break;

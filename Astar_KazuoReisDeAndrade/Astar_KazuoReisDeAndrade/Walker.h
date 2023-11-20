@@ -3,6 +3,9 @@
 #include <vector>
 #include <cmath>
 #include <algorithm>
+#include <windows.h>
+#include <queue>
+
 class Walker
 {
 private:
@@ -24,6 +27,7 @@ public:
 	void InitWalker();
 	void GetNeighbours();
 	void FindPathAstar();
+	void gotoxy(int x, int y);
 	
 	
 };

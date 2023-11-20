@@ -27,6 +27,9 @@
     <ClCompile Include="Walker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Gotoxy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Node.h">

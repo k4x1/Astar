@@ -16,40 +16,7 @@ void Grid::DrawNodes()
 	}
 }
 
-void Grid::UpdateTypes(Node _CurrentNode)
-{
-	
-	switch (_CurrentNode.m_CharType)
-	{
-	case '.':
-		_CurrentNode.m_type = type_clear;
-		break;
-	case 'w':
-		_CurrentNode.m_type = type_wall;
-		_CurrentNode.m_Walkable = false;
-		break;
-	case 's':
-		_CurrentNode.m_type = type_entrance;
 
-		m_EntranceNode = &_CurrentNode;
-		//something wrong with this
-
-		//makes a reference ot start
-		break;
-	case 'x':
-		_CurrentNode.m_type = type_exit;
-		//*m_ExitNode = _CurrentNode;
-		//reference to exit
-		break;
-	case 'a': case 'b':case 'c': case 'd': case 'e': case 'f':case 'g': case 'h':case 'i': case 'j':
-		_CurrentNode.m_type = type_collectable;
-		 //adds collectables to array for reference
-		break;
-	default:
-		break;
-	}
-	m_gridCount++;
-}
 
 void Grid::Update()
 {
@@ -207,8 +174,10 @@ Grid::Grid(std::string _File)
 			m_NodeArray[r][c].m_NodeX = r;
 			m_NodeArray[r][c].m_NodeY = c;
 			UpdateTypes(m_NodeArray[r][c]);
-			
-			if(m_NodeArray[r][c].m_CharType == 's'){
+			if(m_NodeArray[r][c].m_CharType == 'w'){
+				m_NodeArray[r][c].m_Walkable = false;
+			}
+			else if(m_NodeArray[r][c].m_CharType == 's'){
 				m_valid++;
 				m_EntranceNode = &m_NodeArray[r][c];
 				m_Collectables[10] = &m_NodeArray[r][c];
